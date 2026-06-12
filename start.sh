@@ -83,7 +83,11 @@ if [[ "$AUTO_START" == "1" ]]; then
   if [[ "$INSTALLED_VERSION" != "$LATEST_VERSION" ]] || [[ ! -d "./Server" ]]; then
     log_warn "Updating server files..."
 
-    ./hytale-downloader
+    if command -v script >/dev/null 2>&1; then
+      script -q /dev/null -e -c "./hytale-downloader"
+    else
+      ./hytale-downloader
+    fi
 
     if [[ -f "${LATEST_VERSION}.zip" ]]; then
       log_info "Extracting downloaded zip..."
