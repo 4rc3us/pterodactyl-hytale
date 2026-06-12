@@ -85,6 +85,12 @@ if [[ "$AUTO_START" == "1" ]]; then
 
     ./hytale-downloader
 
+    if [[ -f "${LATEST_VERSION}.zip" ]]; then
+      log_info "Extracting downloaded zip..."
+      unzip -qo "${LATEST_VERSION}.zip" -d .
+      rm -f "${LATEST_VERSION}.zip"
+    fi
+
     if [[ -f "${ASSETS_PATH}" ]]; then
       log_info "Extracting assets..."
       unzip -qo "${ASSETS_PATH}" -d .
@@ -134,3 +140,4 @@ exec java \
   ${ALLOW_OP_FLAG} \
   ${BACKUPS_FLAGS} \
   --transport QUIC
+
