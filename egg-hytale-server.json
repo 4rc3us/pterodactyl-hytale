@@ -10,7 +10,7 @@
     "description": null,
     "features": [],
     "docker_images": {
-        "ghcr.io\/luxxy-gf\/temurin-25:latest": "ghcr.io\/luxxy-gf\/temurin-25:latest"
+        "ghcr.io/4rc3us/temurin-25:latest": "ghcr.io/4rc3us/temurin-25:latest"
     },
     "file_denylist": [],
     "startup": ".\/start.sh",
