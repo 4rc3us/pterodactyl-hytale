@@ -127,13 +127,73 @@ if [[ ! -f "./Server/HytaleServer.jar" ]]; then
 fi
 
 # ==============================
+# Auto Install Optimization Mods
+# ==============================
+if [[ "${AUTO_INSTALL_OPTIMIZERS:-1}" == "1" ]]; then
+  log_info "Checking and installing optimization mods..."
+  mkdir -p ./Server/mods
+  
+  # Hytaled Optimizer
+  if [[ ! -f "./Server/mods/HytaledOptimizer.jar" ]]; then
+    log_info "Downloading Hytaled Optimizer..."
+    curl -sSL "https://example.com/api/download/HytaledOptimizer.jar" -o "./Server/mods/HytaledOptimizer.jar" || log_warn "Failed to download Hytaled Optimizer"
+  fi
+  
+  # HyOptimizer
+  if [[ ! -f "./Server/mods/HyOptimizer.jar" ]]; then
+    log_info "Downloading HyOptimizer..."
+    curl -sSL "https://example.com/api/download/HyOptimizer.jar" -o "./Server/mods/HyOptimizer.jar" || log_warn "Failed to download HyOptimizer"
+  fi
+  
+  # Flare Profiler
+  if [[ ! -f "./Server/mods/Flare.jar" ]]; then
+    log_info "Downloading Flare Profiler..."
+    curl -sSL "https://example.com/api/download/Flare.jar" -o "./Server/mods/Flare.jar" || log_warn "Failed to download Flare"
+  fi
+fi
+
+# ==============================
+# Apply Optimizations to config.json
+# ==============================
+CONFIG_FILE="./Server/config.json"
+if [[ -d "./Server" ]]; then
+  if [[ ! -f "$CONFIG_FILE" ]]; then
+    echo "{}" > "$CONFIG_FILE"
+  fi
+  
+  log_info "Injecting environment variables into config.json..."
+  
+  RATE_LIMIT_BOOL="false"
+  [[ "${RATE_LIMIT_ENABLED:-1}" == "1" ]] && RATE_LIMIT_BOOL="true"
+
+  LOCAL_COMPRESSION_BOOL="false"
+  [[ "${LOCAL_COMPRESSION:-0}" == "1" ]] && LOCAL_COMPRESSION_BOOL="true"
+
+  jq --argjson maxViewRadius "${MAX_VIEW_RADIUS:-12}" \
+     --argjson rateLimit "$RATE_LIMIT_BOOL" \
+     --argjson pps "${PACKETS_PER_SECOND:-2000}" \
+     --argjson compression "$LOCAL_COMPRESSION_BOOL" \
+     --argjson itemDespawn "${ITEM_DESPAWN_TIME:-300}" \
+     --argjson maxEntities "${MAX_ENTITIES_PER_CHUNK:-50}" \
+     '.MaxViewRadius = $maxViewRadius | .RateLimitConfig.Enabled = $rateLimit | .RateLimitConfig.PacketsPerSecond = $pps | .LocalCompressionEnabled = $compression | .ItemDespawnTime = $itemDespawn | .MaxEntitiesPerChunk = $maxEntities' \
+     "$CONFIG_FILE" > "${CONFIG_FILE}.tmp" && mv "${CONFIG_FILE}.tmp" "$CONFIG_FILE"
+     
+  log_ok "Optimizations applied to config.json"
+fi
+
+# ==============================
 # Start server
 # ==============================
 log_ok "Starting Hytale server..."
 
+if [[ "${SERVER_MEMORY:-0}" == "0" ]]; then
+  JAVA_OPTS="-XX:MaxRAMPercentage=95.0 -XX:+UseG1GC -XX:AOTCache=HytaleServer.aot"
+else
+  JAVA_OPTS="-Xms${SERVER_MEMORY}M -Xmx${SERVER_MEMORY}M -XX:+UseG1GC -XX:AOTCache=HytaleServer.aot"
+fi
+
 exec java \
-  -Xms128M \
-  -XX:MaxRAMPercentage=95.0 \
+  ${JAVA_OPTS} \
   -Dterminal.jline=false \
   -Dterminal.ansi=true \
   -jar ./Server/HytaleServer.jar \

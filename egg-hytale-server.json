@@ -107,6 +107,76 @@
             "user_editable": true,
             "rules": "required|in:0,1",
             "field_type": "text"
+        },
+        {
+            "name": "Max View Radius",
+            "description": "Radio maximo de chunks que el motor calculara y transmitira (Recomendado: 12).",
+            "env_variable": "MAX_VIEW_RADIUS",
+            "default_value": "12",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|integer|min:2|max:32",
+            "field_type": "text"
+        },
+        {
+            "name": "Rate Limit Enabled",
+            "description": "Activar el limitador de paquetes para proteger contra inundaciones (1 para activar, 0 para desactivar).",
+            "env_variable": "RATE_LIMIT_ENABLED",
+            "default_value": "1",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|in:0,1",
+            "field_type": "text"
+        },
+        {
+            "name": "Packets Per Second",
+            "description": "Limite de paquetes por segundo sostenidos (Recomendado: 2000).",
+            "env_variable": "PACKETS_PER_SECOND",
+            "default_value": "2000",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|integer",
+            "field_type": "text"
+        },
+        {
+            "name": "Local Compression",
+            "description": "Activar compresion de red (0 si en LAN o sin lag de ancho de banda, 1 para ahorrar trafico).",
+            "env_variable": "LOCAL_COMPRESSION",
+            "default_value": "0",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|in:0,1",
+            "field_type": "text"
+        },
+        {
+            "name": "Item Despawn Time",
+            "description": "Segundos que tardan los objetos en el suelo en desaparecer (Recomendado: 300).",
+            "env_variable": "ITEM_DESPAWN_TIME",
+            "default_value": "300",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|integer",
+            "field_type": "text"
+        },
+        {
+            "name": "Max Entities Per Chunk",
+            "description": "Limite de entidades biologicas e IAs por chunk (Recomendado: 50).",
+            "env_variable": "MAX_ENTITIES_PER_CHUNK",
+            "default_value": "50",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|integer",
+            "field_type": "text"
+        },
+        {
+            "name": "Auto Install Optimizers",
+            "description": "Instalar/Actualizar automaticamente los mods recomendados de optimizacion (Hytaled Optimizer, HyOptimizer, Flare).",
+            "env_variable": "AUTO_INSTALL_OPTIMIZERS",
+            "default_value": "1",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|in:0,1",
+            "field_type": "text"
         }
     ]
 }

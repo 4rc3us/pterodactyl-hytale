@@ -1,0 +1,12 @@
+# Reportes y documentos externos
+Optimización Servidor Hytel v0.5.4.md
+TODO_optimizacion.md
+
+# Binarios descargados y comprimidos
+hytale-downloader
+hytale-downloader-windows-amd64.exe
+hytale-downloader.zip
+
+# Entornos y temporales genéricos
+*.log
+.env
